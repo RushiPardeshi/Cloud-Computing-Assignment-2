@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
         - name: todo
-          image: saiharshavarma28/todo-flask:v2
+          image: rp3978/app-img:2.0
           ports:
             - containerPort: 5000
           env:
