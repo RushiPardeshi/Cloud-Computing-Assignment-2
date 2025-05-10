@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>{{ t }}</title>
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='assets/style.css') }}">
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='assets/emoji.css') }}">
+	<script src="{{ url_for('static', filename='assets/twemoji.min.js') }}"></script>
+	<script src="{{ url_for('static', filename='assets/emoji.js') }}"></script>
+</head>
+
+<body>
+	<header>
+		<h1>{{ h }}</h1>
+		<ul class="navbar">
+			<li><a href="/list" class="{{ a1 }}">ALL</a></li>
+			<li><a href="/" class="{{ a2 }}">Uncompleted</a></li>
+			<li><a href="/completed" class="{{ a3 }}">Completed</a></li>
+			<li style="float:right"><a href="/about">About</a></li>
+		</ul>
+	</header>
+
+	<main>
+		<!-- Error Message -->
+		{% if error %}
+		<div class="alert alert-danger">
+			<strong>Error!</strong> {{ error }}
+		</div>
+		{% endif %}
+
+		<hr>
+
+		<!-- Search Section -->
+		<section class="search-section">
+			<form action="/search" method="GET">
+				<label for="refer"><strong>Search Reference:</strong></label>
+				<select name="refer" id="refer" required>
+					<option value="id">Unique ID</option>
+					<option value="name">Task Name</option>
+					<option value="desc">Description</option>
+					<option value="date">Date</option>
+					<option value="pr">Priority</option>
+				</select>
+				<input type="text" name="key" placeholder="Search Task" size="15" required />
+				<button type="submit">Search</button>
+			</form>
+		</section>
+
+		<hr>
+
+		<!-- To-Do List Section -->
+		<section class="todo-list-section">
+			{% if todos[0] %}
+			<h2>To-Do LIST:</h2>
+			<table>
+				<thead>
+					<tr>
+						<th class="status">Status</th>
+						<th class="name">Task Name</th>
+						<th class="desc">Description</th>
+						<th class="date">Date</th>
+						<th class="pr">Priority</th>
+						<th class="func1">Remove</th>
+						<th class="func2">Modify</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for todo in todos %}
+					<tr class="datas">
+						<td><a href="./done?_id={{ todo['_id'] }}"><img
+									src="{{ url_for('static', filename='images/' + todo['done'] + '.png') }}"
+									alt="Status Icon" class="status-icon"></a></td>
+						<td class="name">{{ todo["name"] }}</td>
+						<td class="desc">{{ todo["desc"] }}</td>
+						<td class="date">{{ todo["date"] }}</td>
+						<td class="pr">{{ todo["pr"] }}</td>
+						<td class="func1"><a href="./remove?_id={{ todo['_id'] }}">🗑️</a></td>
+						<td class="func2"><a href="./update?_id={{ todo['_id'] }}">🖊️</a></td>
+					</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+			{% else %}
+			<div class="danger">
+				<h4>No Tasks in the List!</h4>
+			</div>
+			{% endif %}
+		</section>
+
+		<hr>
+
+		<!-- Add Task Section -->
+		<section class="add-task-section">
+			<h2>Add a Task</h2>
+			<form action="/action" method="POST" class="task-form">
+				<div class="form-group">
+					<label for="name">Task Name:</label>
+					<input type="text" name="name" id="name" placeholder="Task Name" required />
+				</div>
+				<div class="form-group">
+					<label for="desc">Description:</label>
+					<textarea name="desc" id="desc" rows="4" placeholder="Enter Description here..."
+						required></textarea>
+				</div>
+				<div class="form-group">
+					<label for="date">Date:</label>
+					<input type="date" name="date" id="date" required />
+				</div>
+				<div class="form-group">
+					<label for="pr">Priority:</label>
+					<select name="pr" id="pr" required>
+						<option value="" disabled selected>Select Priority</option>
+						<option>Low !</option>
+						<option>Medium !!</option>
+						<option>High !!!</option>
+					</select>
+				</div>
+				<button type="submit" class="submit-btn">Create</button>
+			</form>
+		</section>
+	</main>
+
+	<footer style="text-align: center">
+		<p>&copy; 2025 To Do Reminder. All rights reserved.</p>
+	</footer>
+</body>
+
+</html>

@@ -1,0 +1,19 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: pod-alerts
+  labels:
+    prometheus: prometheus
+    role: alert-rules
+spec:
+  groups:
+    - name: pod-alerts
+      rules:
+        - alert: PodUnhealthy
+          expr: kube_pod_status_ready{condition="false"} > 0
+          for: 1m
+          labels:
+            severity: warning
+          annotations:
+            summary: "Pod is not ready"
+            description: "One or more pods are not in a ready state. Investigate pod: {{ $labels.pod }} in namespace: {{ $labels.namespace }}."

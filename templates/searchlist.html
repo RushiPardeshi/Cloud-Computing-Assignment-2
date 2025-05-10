@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>{{ t }}</title>
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='assets/style.css') }}">
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='assets/emoji.css') }}">
+	<script src="{{ url_for('static', filename='assets/twemoji.min.js') }}"></script>
+	<script src="{{ url_for('static', filename='assets/emoji.js') }}"></script>
+</head>
+
+<body>
+	<header>
+		<h1>{{ h }}</h1>
+		<ul class="navbar">
+			<li><a href="/list" class="{{ a1 }}">ALL</a></li>
+			<li><a href="/" class="{{ a2 }}">Uncompleted</a></li>
+			<li><a href="/completed" class="{{ a3 }}">Completed</a></li>
+			<li style="float:right"><a href="/about">About</a></li>
+		</ul>
+	</header>
+
+	<main>
+		<hr>
+
+		<!-- To-Do List Results -->
+		{% if todos[0] %}
+		<section class="todo-results">
+			<h2>Result of the Search: To-Do List</h2>
+			<table class="todo-table">
+				<thead>
+					<tr>
+						<th class="status">Status</th>
+						<th class="name">Task Name</th>
+						<th class="desc">Task Description</th>
+						<th class="date">Date</th>
+						<th class="pr">Project</th>
+						<th class="func">Delete</th>
+						<th class="func">Modify</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for todo in todos %}
+					<tr>
+						<td><a href="./done?_id={{ todo['_id'] }}"><img
+									src="{{ url_for('static', filename='images/' + todo['done'] + '.png') }}"
+									alt="Status Icon" class="status-icon"></a></td>
+						<td>{{ todo["name"] }}</td>
+						<td>{{ todo["desc"] }}</td>
+						<td>{{ todo["date"] }}</td>
+						<td>{{ todo["pr"] }}</td>
+						<td><a href="./remove?_id={{ todo['_id'] }}" class="btn btn-danger">🗑️</a></td>
+						<td><a href="./update?_id={{ todo['_id'] }}" class="btn btn-primary">📝</a></td>
+					</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</section>
+		{% else %}
+		<div class="no-results">
+			<h4>No Result Found!</h4>
+		</div>
+		{% endif %}
+	</main>
+
+	<footer>
+		<p>&copy; 2025 To Do Reminder. All rights reserved.</p>
+	</footer>
+</body>
+
+</html>

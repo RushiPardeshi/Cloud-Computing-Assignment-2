@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>{{ t }}</title>
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='assets/style.css') }}">
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='assets/emoji.css') }}">
+	<script src="{{ url_for('static', filename='assets/twemoji.min.js') }}"></script>
+	<script src="{{ url_for('static', filename='assets/emoji.js') }}"></script>
+</head>
+
+<body>
+	<header>
+		<h1>{{ h }}</h1>
+		<ul class="navbar">
+			<li><a href="/list" class="{{ a1 }}">ALL</a></li>
+			<li><a href="/" class="{{ a2 }}">Uncompleted</a></li>
+			<li><a href="/completed" class="{{ a3 }}">Completed</a></li>
+			<li style="float:right"><a href="/about">About</a></li>
+		</ul>
+	</header>
+
+	<main>
+		<hr>
+		<section class="update-section">
+			<h3>Update Task</h3>
+			<form action="/action3" method="POST" class="update-form">
+				{% for task in tasks %}
+				<div class="form-group">
+					<label>Unique ID:</label>
+					<p><b>{{ task['_id'] }}</b></p>
+					<input type="hidden" name="_id" value="{{ task['_id'] }}">
+				</div>
+				<div class="form-group">
+					<label for="name">Task Name:</label>
+					<input type="text" name="name" id="name" value="{{ task['name'] }}" placeholder="Enter Task Name"
+						required />
+				</div>
+				<div class="form-group">
+					<label for="desc">Description:</label>
+					<textarea name="desc" id="desc" rows="4" placeholder="Enter Description"
+						required>{{ task['desc'] }}</textarea>
+				</div>
+				<div class="form-group">
+					<label for="date">Date:</label>
+					<input type="date" name="date" id="date" value="{{ task['date'] }}" required />
+				</div>
+				<div class="form-group">
+					<label for="pr">Priority:</label>
+					<select name="pr" id="pr" required>
+						<option selected disabled>Select Priority</option>
+						<option>Low !</option>
+						<option>Medium !!</option>
+						<option>High !!!</option>
+					</select>
+				</div>
+				{% endfor %}
+				<button type="submit" class="update-btn">Update Task</button>
+			</form>
+		</section>
+	</main>
+
+	<footer style="text-align:center">
+		<p>&copy; 2025 To Do Reminder. All rights reserved.</p>
+	</footer>
+</body>
+
+</html>
